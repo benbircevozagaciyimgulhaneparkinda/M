@@ -3,84 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W4YWEKNMEAWK | Private Terminal</title>
+    <title>W4YWEKNMEAWK | Global Terminal</title>
     <style>
-        :root { --accent: #0095f6; --bg: #000; --panel: #121212; --border: #262626; }
-        body { background: var(--bg); color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; overflow: hidden; }
+        :root { --blue: #0095f6; --bg: #000; --border: #262626; --panel: #121212; }
+        body { background: var(--bg); color: #fff; font-family: -apple-system, sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
         
-        /* GİRİŞ PANELİ */
-        #login-screen { position: fixed; inset: 0; background: #000; display: flex; align-items: center; justify-content: center; z-index: 1000; flex-direction: column; }
-        .card { background: var(--panel); border: 1px solid var(--border); padding: 30px; border-radius: 12px; width: 320px; text-align: center; }
-        .input-field { background: #262626; border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 8px; margin: 8px 0; width: 100%; box-sizing: border-box; outline: none; font-size: 14px; }
-        .action-btn { background: var(--accent); color: #fff; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 15px; }
-        .target-info { font-size: 10px; color: #555; margin-bottom: 15px; font-family: monospace; }
+        /* GİRİŞ PANELİ (HER ŞEY BURADA SORULUR) */
+        #setup-screen { background: var(--panel); border: 1px solid var(--border); padding: 25px; border-radius: 15px; width: 350px; text-align: center; z-index: 10; }
+        .in { background: #262626; border: 1px solid var(--border); color: #fff; padding: 10px; border-radius: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; outline: none; font-size: 13px; }
+        .btn { background: var(--blue); color: #fff; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        label { font-size: 10px; color: #888; display: block; text-align: left; margin-top: 5px; }
 
-        /* CHAT EKRANI */
-        #main-ui { display: none; height: 100vh; flex-direction: column; }
-        header { padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #000; }
-        #chat-area { flex: 1; overflow-y: auto; padding: 20px; background-size: cover !important; background-position: center !important; }
+        /* ANA CHAT EKRANI */
+        #app { display: none; position: fixed; inset: 0; background: #000; flex-direction: column; }
+        header { padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #050505; }
+        #chat { flex: 1; overflow-y: auto; padding: 20px; background-size: cover !important; scroll-behavior: smooth; }
 
-        /* MESAJ BALONLARI */
-        .msg-row { display: flex; margin-bottom: 15px; align-items: flex-end; }
-        .msg-me { flex-direction: row-reverse; }
-        .user-pp { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
-        .bubble { background: #262626; padding: 10px 15px; border-radius: 18px; max-width: 70%; margin: 0 10px; font-size: 15px; line-height: 1.4; }
-        .msg-me .bubble { background: var(--accent); }
-        .msg-ops { font-size: 10px; color: #aaa; margin-top: 4px; display: flex; gap: 10px; cursor: pointer; }
-        .msg-me .msg-ops { justify-content: flex-end; }
+        /* MESAJLAR */
+        .msg { display: flex; margin-bottom: 20px; align-items: flex-end; }
+        .me { flex-direction: row-reverse; }
+        .pp { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--blue); object-fit: cover; }
+        .bubble { background: #262626; padding: 12px 16px; border-radius: 18px; max-width: 65%; margin: 0 10px; }
+        .me .bubble { background: var(--blue); }
+        .actions { font-size: 10px; color: #aaa; margin-top: 5px; display: flex; gap: 8px; cursor: pointer; }
 
-        footer { padding: 15px; background: #000; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        footer { padding: 15px; border-top: 1px solid var(--border); display: flex; gap: 10px; background: #000; }
     </style>
 </head>
 <body>
 
-<div id="login-screen">
-    <div class="card">
-        <h2 style="color:var(--accent); margin-top:0;">W4YWEKNMEAWK</h2>
-        <div class="target-info">REPO: benbircevozagaciyimgulhaneparkinda/M</div>
-        
-        <input type="password" id="auth-token" class="input-field" placeholder="GitHub Token (ghp_...)">
-        <hr style="border: 0.1px solid #333; margin: 15px 0;">
-        <input type="text" id="login-user" class="input-field" placeholder="Kullanıcı Adı">
-        <input type="password" id="login-pass" class="input-field" placeholder="Şifre">
-        
-        <button class="action-btn" onclick="App.connect()">SİSTEME GİRİŞ YAP</button>
-    </div>
+<div id="setup-screen">
+    <h2 style="color:var(--blue); margin:0 0 15px 0;">SİSTEM KURULUMU</h2>
+    
+    <label>GITHUB ERİŞİM ANAHTARI</label>
+    <input type="password" id="inp-token" class="in" placeholder="ghp_********************">
+    
+    <label>DEPO SAHİBİ (OWNER)</label>
+    <input type="text" id="inp-owner" class="in" placeholder="Örn: benbircevozagaciyimgulhaneparkinda">
+    
+    <label>DEPO İSMİ (REPO)</label>
+    <input type="text" id="inp-repo" class="in" placeholder="Örn: M">
+    
+    <label>VERİ DOSYASI (JSON)</label>
+    <input type="text" id="inp-file" class="in" placeholder="Örn: database.json">
+    
+    <hr style="border: 0.1px solid #333; margin: 15px 0;">
+    
+    <label>KULLANICI ADINIZ</label>
+    <input type="text" id="inp-user" class="in" placeholder="Örn: yokedicidinazor">
+    
+    <label>ŞİFRENİZ</label>
+    <input type="password" id="inp-pass" class="in" placeholder="******">
+    
+    <button class="btn" onclick="System.boot()">SİSTEME BAĞLAN</button>
 </div>
 
-<div id="main-ui">
+<div id="app">
     <header>
         <div style="display:flex; align-items:center; gap:10px;">
-            <img id="nav-pp" src="" class="user-pp" style="width:28px; height:28px;">
-            <b id="nav-user" style="font-size:14px;"></b>
+            <img id="nav-pp" src="" class="pp" style="width:30px; height:30px;">
+            <b id="nav-user"></b>
         </div>
-        <button onclick="App.updateBG()" style="background:none; border:none; color:var(--accent); font-weight:bold; cursor:pointer;">BG</button>
+        <button onclick="System.setBG()" style="background:none; border:none; color:var(--blue); font-weight:bold; cursor:pointer;">TEMA</button>
     </header>
-    <div id="chat-area"></div>
+    <div id="chat"></div>
     <footer>
-        <input type="text" id="msg-input" class="input-field" style="margin:0; flex:1;" placeholder="Mesaj veya Resim URL...">
-        <button class="action-btn" style="width:auto; margin:0; padding:0 20px;" onclick="App.sendMessage()">GÖNDER</button>
+        <input type="text" id="msg-input" class="in" style="margin:0; flex:1;" placeholder="Mesaj veya Link...">
+        <button class="btn" style="width:auto; margin:0; padding:0 20px;" onclick="System.send()">GÖNDER</button>
     </footer>
 </div>
 
 <script>
-const App = {
-    user: "", token: "", db: null, sha: "",
-    repoData: {
-        owner: "benbircevozagaciyimgulhaneparkinda",
-        repo: "M",
-        file: "database.json"
-    },
+const System = {
+    config: {}, token: "", me: "", db: null, sha: "",
 
-    connect: async function() {
-        this.token = document.getElementById('auth-token').value;
-        const u = document.getElementById('login-user').value;
-        const p = document.getElementById('login-pass').value;
+    boot: async function() {
+        // Tüm bilgileri ekrandan al
+        this.token = document.getElementById('inp-token').value;
+        this.config = {
+            owner: document.getElementById('inp-owner').value,
+            repo: document.getElementById('inp-repo').value,
+            file: document.getElementById('inp-file').value
+        };
+        const u = document.getElementById('inp-user').value;
+        const p = document.getElementById('inp-pass').value;
 
-        if(!this.token.includes("ghp_")) return alert("Geçerli bir Token girin!");
+        if(!this.token || !this.config.owner || !u) return alert("Lütfen tüm alanları doldurun!");
 
         try {
-            const res = await fetch(`https://api.github.com/repos/${this.repoData.owner}/${this.repoData.repo}/contents/${this.repoData.file}`, {
+            const res = await fetch(`https://api.github.com/repos/${this.config.owner}/${this.config.repo}/contents/${this.config.file}`, {
                 headers: { "Authorization": `token ${this.token}` }
             });
             
@@ -90,20 +101,21 @@ const App = {
             this.sha = data.sha;
             this.db = JSON.parse(atob(data.content));
 
+            // JSON içindeki kullanıcıyı ve şifreyi kontrol et
             if(this.db.config[u] && this.db.config[u].pass === p) {
-                this.user = u;
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-ui').style.display = 'flex';
+                this.me = u;
+                document.getElementById('setup-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'flex';
                 this.render();
-                setInterval(() => this.refresh(), 5000);
-            } else { alert("Giriş bilgileri hatalı!"); }
-        } catch(e) { 
-            alert("BAĞLANTI HATASI!\nRepo ismi 'M' mi? Token yetkili mi? database.json var mı?"); 
+                setInterval(() => this.pull(), 5000);
+            } else { alert("Giriş başarısız! JSON dosyasındaki bilgilerle eşleşmiyor."); }
+        } catch(e) {
+            alert("BAĞLANTI HATASI!\nBilgileri kontrol edin (Token, Repo, Dosya ismi vb.)");
         }
     },
 
-    refresh: async function() {
-        const res = await fetch(`https://api.github.com/repos/${this.repoData.owner}/${this.repoData.repo}/contents/${this.repoData.file}`, {
+    pull: async function() {
+        const res = await fetch(`https://api.github.com/repos/${this.config.owner}/${this.config.repo}/contents/${this.config.file}?t=${Date.now()}`, {
             headers: { "Authorization": `token ${this.token}` }
         });
         const data = await res.json();
@@ -113,26 +125,26 @@ const App = {
     },
 
     render: function() {
-        const container = document.getElementById('chat-area');
-        const myProfile = this.db.config[this.user];
-        document.getElementById('nav-pp').src = myProfile.pp;
-        document.getElementById('nav-user').innerText = "@" + this.user;
-        if(myProfile.bg) container.style.background = `url('${myProfile.bg}') center/cover fixed`;
+        const box = document.getElementById('chat');
+        const myD = this.db.config[this.me];
+        document.getElementById('nav-pp').src = myD.pp;
+        document.getElementById('nav-user').innerText = "@" + this.me;
+        if(myD.bg) box.style.background = `url('${myD.bg}') center/cover fixed`;
 
-        container.innerHTML = this.db.messages.map(m => {
-            const isMe = m.u === this.user;
-            let content = m.t;
-            if(m.t.match(/\.(jpg|jpeg|png|gif|webp)$/i)) content = `<img src="${m.t}" style="max-width:100%; border-radius:12px; margin-top:5px;">`;
-            if(m.t.match(/\.(mp4|webm)$/i)) content = `<video src="${m.t}" controls style="max-width:100%; border-radius:12px;"></video>`;
+        box.innerHTML = this.db.messages.map(m => {
+            const isMe = m.u === this.me;
+            let val = m.t;
+            if(m.t.match(/\.(jpg|jpeg|png|gif|webp)$/i)) val = `<img src="${m.t}" style="max-width:100%; border-radius:12px;">`;
+            if(m.t.match(/\.(mp4|webm)$/i)) val = `<video src="${m.t}" controls style="max-width:100%; border-radius:12px;"></video>`;
 
             return `
-                <div class="msg-row ${isMe ? 'msg-me' : ''}">
-                    <img src="${this.db.config[m.u].pp}" class="user-pp">
+                <div class="msg ${isMe ? 'me' : ''}">
+                    <img src="${this.db.config[m.u].pp}" class="pp">
                     <div class="bubble">
-                        <b style="font-size:11px; color:var(--accent)">${m.u}</b><br>${content}
-                        ${isMe ? `<div class="msg-ops">
-                            <span onclick="App.editMsg('${m.id}')">Düzenle</span>
-                            <span onclick="App.delMsg('${m.id}')">Sil</span>
+                        <b style="font-size:10px; color:var(--blue)">${m.u}</b><br>${val}
+                        ${isMe ? `<div class="actions">
+                            <span onclick="System.edit('${m.id}')">Düzenle</span>
+                            <span onclick="System.del('${m.id}')">Sil</span>
                         </div>` : ''}
                     </div>
                 </div>
@@ -140,33 +152,33 @@ const App = {
         }).join('');
     },
 
-    sendMessage: async function() {
-        const input = document.getElementById('msg-input');
-        if(!input.value) return;
-        this.db.messages.push({ id: Date.now().toString(), u: this.user, t: input.value });
-        await this.sync();
-        input.value = "";
+    send: async function() {
+        const inp = document.getElementById('msg-input');
+        if(!inp.value) return;
+        this.db.messages.push({ id: Date.now().toString(), u: this.me, t: inp.value });
+        await this.push();
+        inp.value = "";
     },
 
-    delMsg: async function(id) {
+    del: async function(id) {
         if(!confirm("Silinsin mi?")) return;
         this.db.messages = this.db.messages.filter(x => x.id !== id);
-        await this.sync();
+        await this.push();
     },
 
-    editMsg: async function(id) {
+    edit: async function(id) {
         const m = this.db.messages.find(x => x.id === id);
         const n = prompt("Düzenle:", m.t);
-        if(n) { m.t = n + " (düzenlendi)"; await this.sync(); }
+        if(n) { m.t = n + " (düzenlendi)"; await this.push(); }
     },
 
-    updateBG: async function() {
+    setBG: async function() {
         const url = prompt("Arka plan linki:");
-        if(url) { this.db.config[this.user].bg = url; await this.sync(); }
+        if(url) { this.db.config[this.me].bg = url; await this.push(); }
     },
 
-    sync: async function() {
-        await fetch(`https://api.github.com/repos/${this.repoData.owner}/${this.repoData.repo}/contents/${this.repoData.file}`, {
+    push: async function() {
+        await fetch(`https://api.github.com/repos/${this.config.owner}/${this.config.repo}/contents/${this.config.file}`, {
             method: "PUT",
             headers: { "Authorization": `token ${this.token}`, "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -175,7 +187,7 @@ const App = {
                 sha: this.sha
             })
         });
-        this.refresh();
+        this.pull();
     }
 };
 </script>
